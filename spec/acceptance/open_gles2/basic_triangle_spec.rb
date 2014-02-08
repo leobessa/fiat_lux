@@ -210,7 +210,6 @@ module FiatLux::Graphics::Rendering
 
       device.program_pipeline = device.create_pipeline_program(vertex_shader: vertex_shader, fragment_shader: fragment_shader)
 
-      glClearColor(0.0, 0.0, 1.0, 1.0)
       vertices_ptr = Pointer.new(:float, 9)
       [ 0.0, 0.5, 0.0,
        -0.5,-0.5, 0.0,
@@ -218,7 +217,6 @@ module FiatLux::Graphics::Rendering
       ].each_with_index { |e,index| vertices_ptr[index] = e }
       
       controller.view.drawFrame do
-        glClear(GL_COLOR_BUFFER_BIT)
         # Load vertex data
         # Bind the variables to the appropriate vertexprogram inputs.
         # device.add_binding(pos_var, vertex_program, "Position")
