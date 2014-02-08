@@ -27,6 +27,10 @@ module FiatLux
               FiatLux::Graphics::Rendering::OpenGL::Pipeline::Program.new(vertex_shader: vertex_shader, fragment_shader: fragment_shader, driver: driver)
             end
 
+            def program_pipeline=(program)
+              @driver.bind_program_pipeline(program.handle)
+            end
+
             private
             attr_reader :driver
           end

@@ -16,7 +16,7 @@ Motion::Project::App.setup do |app|
 
   app.frameworks << 'OpenGLES'
   app.frameworks << 'QuartzCore'
-  app.frameworks << 'GLKit'
   app.frameworks << 'CoreGraphics'
 
+  app.resources_dirs << './spec/resources/' if app.spec_mode
 end

@@ -6,6 +6,8 @@ module FiatLux
 
           class Program
 
+            attr_reader :handle
+
             def initialize(opts = {})
               @driver          = opts.fetch(:driver)
               @vertex_shader   = opts.fetch(:vertex_shader)
@@ -17,10 +19,10 @@ module FiatLux
             private
 
             def link!
-              handle = @driver.gen_program_pipeline
-              @driver.bind_program_pipeline(handle)
-              @driver.use_program_stages(handle, :vertex_shader_bit_ext, @vertex_shader.handle)
-              @driver.use_program_stages(handle, :fragment_shader_bit_ext, @fragment_shader.handle)
+              @handle = @driver.gen_program_pipeline
+              @driver.bind_program_pipeline(@handle)
+              @driver.use_program_stages(@handle, :vertex_shader_bit_ext, @vertex_shader.handle)
+              @driver.use_program_stages(@handle, :fragment_shader_bit_ext, @fragment_shader.handle)
               true
             end
 
