@@ -31,6 +31,10 @@ module FiatLux
               @driver.bind_program_pipeline(program.handle)
             end
 
+            def create_geometry
+              FiatLux::Graphics::Rendering::Geometry.new
+            end
+
             private
             attr_reader :driver
           end

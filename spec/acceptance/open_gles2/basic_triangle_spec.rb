@@ -194,9 +194,9 @@ module FiatLux::Graphics::Rendering
       # and I create a vertex shader program
       vertex_shader = device.create_vertex_shader(source: <<-eos)
         #extension GL_EXT_separate_shader_objects : enable
-        attribute vec4 vPosition;
+        attribute vec4 VertexPosition;
         void main(){
-          gl_Position = vPosition;
+          gl_Position = VertexPosition;
         }
       eos
       # and a fragment shader program
@@ -209,20 +209,62 @@ module FiatLux::Graphics::Rendering
       # and create a pipeline program from them
 
       device.program_pipeline = device.create_pipeline_program(vertex_shader: vertex_shader, fragment_shader: fragment_shader)
+      # Create a variable description.
+      position_variable_description = FiatLux::Graphics::Variables::VariableDescription.new(
+        name: "VertexPosition",
+        type: :float,
+        components: 3,
+        frequency: :each_vertex,
+        shareable: true,
+        geometry_related: true
+      )
+      # Create a position variable.
+      # Fill the variable data.
+      position_variable = FiatLux::Graphics::Variables::Variable.new(
+        description: position_variable_description,
+        data: [
+          [ 0.0, 0.5, 0.0],
+          [-0.5,-0.5, 0.0],
+          [ 0.5,-0.5, 0.0]
+        ]
+      )
+      # Create variables indicating primitive type and element count.
+      type_variable_description = FiatLux::Graphics::Variables::VariableDescription.new(
+        name: "PrimitiveType",
+        type: :ulong,
+        frequency: :each_primitive,
+        shareable: true,
+        geometry_related: false
+      )
+      type_variable = FiatLux::Graphics::Variables::Variable.new(
+        description: type_variable_description,
+        data: [GL_TRIANGLES]
+      )
 
-      vertices_ptr = Pointer.new(:float, 9)
-      [ 0.0, 0.5, 0.0,
-       -0.5,-0.5, 0.0,
-        0.5,-0.5, 0.0
-      ].each_with_index { |e,index| vertices_ptr[index] = e }
+      count_variable_description = FiatLux::Graphics::Variables::VariableDescription.new(
+        name: "ElementCount",
+        type: :long,
+        frequency: :each_primitive,
+        shareable: true,
+        geometry_related: false
+      )
+      count_variable = FiatLux::Graphics::Variables::Variable.new(
+        description: count_variable_description, data: [3]
+      )
+      # Collect the variables.
+      variable_set = FiatLux::Graphics::Variables::VariableSet.new
+      variable_set << position_variable
+      variable_set << type_variable
+      variable_set << count_variable
+      # Create geometry from variables.
+      geometry = device.create_geometry
+      geometry.variables = variable_set
       
       controller.view.drawFrame do
         # Load vertex data
         # Bind the variables to the appropriate vertexprogram inputs.
         # device.add_binding(pos_var, vertex_program, "Position")
-        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,vertices_ptr)
-        glEnableVertexAttribArray(0)
-        glDrawArrays(GL_TRIANGLES,0,3)
+        geometry.draw
       end
       actual_image = controller.view.render_buffer_image
       expected_image = UIImage.imageWithContentsOfFile(NSBundle.mainBundle.pathForResource "fixtures/triangle", ofType:"png")
