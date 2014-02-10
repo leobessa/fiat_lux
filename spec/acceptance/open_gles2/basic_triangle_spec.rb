@@ -194,9 +194,9 @@ module FiatLux::Graphics::Rendering
       # and I create a vertex shader program
       vertex_shader = device.create_vertex_shader(source: <<-eos)
         #extension GL_EXT_separate_shader_objects : enable
-        attribute vec4 VertexPosition;
+        attribute vec4 vPosition;
         void main(){
-          gl_Position = VertexPosition;
+          gl_Position = vPosition;
         }
       eos
       # and a fragment shader program
@@ -259,7 +259,9 @@ module FiatLux::Graphics::Rendering
       # Create geometry from variables.
       geometry = device.create_geometry
       geometry.variables = variable_set
-      
+      # Bind the variables to the appropriate vertexprogram inputs.
+      device.add_binding(variable: position_variable, name: "vPosition")
+      # Rendering loop
       controller.view.drawFrame do
         # Load vertex data
         # Bind the variables to the appropriate vertexprogram inputs.

@@ -29,15 +29,7 @@ module FiatLux
         end
 
         def draw
-          position_variable = @variables.find { |e| e.name == "VertexPosition" }
-          data = position_variable.data.flatten
-          vertices_ptr  = Pointer.new(position_variable.type, data.count)
-          data.each_with_index { |e,index| vertices_ptr[index] = e }
-
           each_primitive do |primitive|
-            index = 0 # = glGetAttribLocation(program, "position");
-            glVertexAttribPointer(index,3,GL_FLOAT,GL_FALSE,0,vertices_ptr)
-            glEnableVertexAttribArray(index)
             glDrawArrays(primitive.type,primitive.starting_index,primitive.count)
           end
         end
