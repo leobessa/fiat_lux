@@ -39,11 +39,16 @@ module FiatLux
               program  = opts.fetch(:program)
               variable = opts.fetch(:variable)
               name     = opts.fetch(:name)
+              size     = variable.component_size
+              gl_type  = case variable.type
+              when :float
+                GL_FLOAT
+              end
               data = variable.data.flatten
               vertices_ptr  = Pointer.new(variable.type, data.count)
               data.each_with_index { |e,index| vertices_ptr[index] = e }
               index = glGetAttribLocation(program.handle, name)
-              glVertexAttribPointer(index,3,GL_FLOAT,GL_FALSE,0,vertices_ptr)
+              glVertexAttribPointer(index,size,gl_type,GL_FALSE,0,vertices_ptr)
               glEnableVertexAttribArray(index)
             end
 

@@ -18,8 +18,8 @@ module FiatLux
           @description.type
         end
 
-        def components
-          @description.components
+        def component_size
+          @description.component_size
         end
 
       end

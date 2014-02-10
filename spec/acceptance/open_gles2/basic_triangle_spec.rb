@@ -213,7 +213,7 @@ module FiatLux::Graphics::Rendering
       position_variable_description = FiatLux::Graphics::Variables::VariableDescription.new(
         name: "VertexPosition",
         type: :float,
-        components: 3,
+        component_size: 3,
         frequency: :each_vertex,
         shareable: true,
         geometry_related: true

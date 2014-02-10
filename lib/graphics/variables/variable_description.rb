@@ -3,7 +3,7 @@ module FiatLux
     module Variables
       class VariableDescription
 
-        attr_reader :name, :type, :frequency, :shareable, :geometry_related, :components
+        attr_reader :name, :type, :frequency, :shareable, :geometry_related, :component_size
 
         def initialize(opts = {})
           @name = opts.fetch(:name)
@@ -11,7 +11,7 @@ module FiatLux
           @frequency = opts.fetch(:frequency)
           @shareable = opts.fetch(:shareable)
           @geometry_related = opts.fetch(:geometry_related)
-          @components = opts.fetch(:components){ 1 }
+          @component_size = opts.fetch(:component_size){ 1 }
         end
 
       end
