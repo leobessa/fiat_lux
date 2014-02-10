@@ -260,7 +260,7 @@ module FiatLux::Graphics::Rendering
       geometry = device.create_geometry
       geometry.variables = variable_set
       # Bind the variables to the appropriate vertexprogram inputs.
-      device.add_binding(variable: position_variable, name: "vPosition")
+      device.add_binding(variable: position_variable, program: vertex_shader, name: "vPosition")
       # Rendering loop
       controller.view.drawFrame do
         # Load vertex data
